@@ -1,0 +1,39 @@
+- name: Install APT requirements
+  apt:
+    package: "{{ item }}"
+  with_items:
+    - build-essential
+    - libssl-dev
+    - libffi-dev
+    - python-dev
+    - python-pip
+    - libsasl2-dev
+    - libldap2-dev
+    - python3.5-dev
+
+- name: install PIP requirements
+  pip:
+    name: psycopg2-binary
+
+- name: self upgrade setuptools and pip
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - setuptools
+    - pip
+
+- name: Create user for superset
+  user:
+    name: "{{ superset_user }}"
+    home: "{{ superset_path }}"
+    shell: /bin/false
+
+- name: Create superset group.
+  group:
+    name: "{{ superset_group }}"
+
+- name: Install superset
+  pip:
+    name: superset
+    version: "{{ superset_version }}"
