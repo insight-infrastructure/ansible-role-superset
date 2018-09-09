@@ -11,6 +11,10 @@
     - libldap2-dev
     - python3.5-dev
 
+- name: Upgrade openSSL
+  shell: "python -m easy_install --upgrade pyOpenSSL"
+  changed_when: false
+
 - name: install PIP requirements
   pip:
     name: psycopg2-binary
