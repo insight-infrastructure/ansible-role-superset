@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name:
-  author: leafnode
+  author: iroquoisorg
   description: role for superset
   license: BSD
   min_ansible_version: 2.5.4 # tested on this version, might work on older versions
