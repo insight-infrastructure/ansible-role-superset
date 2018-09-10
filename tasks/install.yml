@@ -41,3 +41,4 @@
   pip:
     name: superset
     version: "{{ superset_version }}"
+  register: superset_install
