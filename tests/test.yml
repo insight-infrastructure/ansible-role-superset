@@ -1,5 +1,10 @@
 ---
 - hosts: localhost
   remote_user: root
+  vars:
+    pg_version: 9.6
+    pg_users: [{name: "superset", password: "secret", permissions: "CREATEDB"}]
+    pg_databases: [{name: "superset", owner: "superset"}]
   roles:
+    - postgresql
     - ansible-role-superset
