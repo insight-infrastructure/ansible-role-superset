@@ -1,5 +1,2 @@
 ---
-- src: https://github.com/iroquoisorg/ansible-role-postgresql.git
-  name: postgresql
-  version: master
-  scm: git
+- src: iroquoisorg.postgresql

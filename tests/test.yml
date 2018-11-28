@@ -6,5 +6,5 @@
     pg_users: [{name: "superset", password: "secret", permissions: "CREATEDB"}]
     pg_databases: [{name: "superset", owner: "superset"}]
   roles:
-    - postgresql
+    - iroquoisorg.postgresql
     - ansible-role-superset
