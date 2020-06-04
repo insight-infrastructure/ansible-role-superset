@@ -1,15 +1,32 @@
-- name: Install APT requirements
+#- name: Install APT requirements
+#  apt:
+#    package: "{{ item }}"
+#  with_items:
+#    - build-essential
+#    - libssl-dev
+#    - libffi-dev
+#    - python-dev
+#    - python-pip
+#    - libsasl2-dev
+#    - libldap2-dev
+#    - python3.8-dev
+
+- name: Install required packages
   apt:
-    package: "{{ item }}"
-  with_items:
-    - build-essential
-    - libssl-dev
-    - libffi-dev
-    - python-dev
-    - python-pip
-    - libsasl2-dev
-    - libldap2-dev
-    - python3.5-dev
+    name: "{{ packages }}"
+    force_apt_get: yes
+    state: latest
+    update_cache: yes
+  vars:
+    packages:
+      - build-essential
+      - libssl-dev
+      - libffi-dev
+      - python-dev
+      - python-pip
+      - libsasl2-dev
+      - libldap2-dev
+      - python3.8-dev
 
 - name: Upgrade openSSL
   shell: "python -m easy_install --upgrade pyOpenSSL"
@@ -26,6 +43,7 @@
   with_items:
     - setuptools
     - pip
+    - email_validator
 
 - name: Create user for superset
   user:
