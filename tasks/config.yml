@@ -1,10 +1,3 @@
-- name: Configure superset
-  template:
-    src: config.py.j2
-    dest: "{{ superset_python_path }}/dist-packages/superset/config.py"
-  notify:
-    - restart superset
-
 - name: Create superset systemd service
   template:
     src: "superset.service.j2"
@@ -14,6 +7,13 @@
     mode: 0644
   notify:
     - reload systemctl
+    - restart superset
+
+- name: Configure superset
+  template:
+    src: config.py.j2
+    dest: "{{ superset_venv_path }}/lib/python{{ python_version }}/site-packages/superset/config.py"
+  notify:
     - restart superset
 
 - name: Ensure Superset is running

@@ -7,30 +7,3 @@
     state: restarted
     enabled: yes
 
-- name: Create admin user
-  become: yes
-  become_user: superset
-  command: >
-    fabmanager create-admin
-      --app "{{ superset_app }}"
-      --username "{{ superset_username }}"
-      --firstname "{{ superset_firstname }}"
-      --lastname "{{ superset_lastname }}"
-      --email "{{ superset_email }}"
-      --password "{{ superset_password }}"
-
-- name: Prepare superset DB
-  become: yes
-  become_user: superset
-  command: superset db upgrade
-
-- name: Load examples
-  become: yes
-  become_user: superset
-  command: superset load_examples
-  when: superset_load_examples
-
-- name: Init superset
-  become: yes
-  become_user: superset
-  command: superset init
