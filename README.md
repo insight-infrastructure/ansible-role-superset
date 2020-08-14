@@ -36,7 +36,7 @@ superset_user: superset
 superset_group: superset
 
 superset_path: /opt/superset
-superset_python_path: /usr/local/lib/python2.7
+superset_python_path: /opt/superset/lib/python2.7
 
 superset_postgres_db_host: localhost
 superset_postgres_db_port: 5432
