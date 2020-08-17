@@ -16,6 +16,17 @@
   notify:
     - restart superset
 
+# Hack to get it to work
+# https://stackoverflow.com/questions/63409478/ansible-pip-installing-in-superset-in-virtualenv-forcing-pip-vs-pip3
+- name: Re-install superset
+  shell:
+    cmd: |
+      . {{superset_venv_path}}/bin/activate
+      pip uninstall -y apache-superset
+      pip install apache-superset
+  notify:
+    - restart superset
+
 - name: Ensure Superset is running
   service:
     name: superset

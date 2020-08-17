@@ -66,32 +66,14 @@
     pippkgs:
       - pip
       - setuptools
-#      - cryptography
-#      - psycopg2-binary
-#      - pyopenssl
-#      - email_validator
-#      - colorama==0.3.9
+      - psycopg2-binary
 
-#- name: Install superset
-#  pip:
-#    name: apache-superset
-#    executable: pip
-#    virtualenv: "{{ superset_venv_path }}"
-#    virtualenv_command: /usr/bin/python3.6 -m venv
-
-#- name: Install superset
-#  shell:
-#    cmd: ". {{superset_venv_path}}/bin/activate && pip install --upgrade setuptools pip && pip install apache-superset"  # noqa
-
+# Use shell to force pip executable as pip - not pip3
 - name: Install superset
   shell:
     cmd: |
       . {{superset_venv_path}}/bin/activate
       pip install apache-superset
-
-#- name: Install superset
-#  shell:
-#    cmd: ". {{superset_venv_path}}/bin/activate && pip uninstall apache-superset && pip uninstall apache-superset"  # noqa
 
 - name: Create admin user
   become_user: superset
