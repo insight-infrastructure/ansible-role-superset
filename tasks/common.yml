@@ -1,0 +1,78 @@
+---
+
+- name: Install pip
+  become_user: superset
+  pip:
+    name: "{{ pippkgs }}"
+    state: latest
+    virtualenv: "{{ superset_venv_path }}"
+    virtualenv_command: /usr/bin/python3.6 -m venv
+  vars:
+    pippkgs:
+      - pip
+      - setuptools
+
+- name: Install pip packages
+  become_user: superset
+  pip:
+    name: "{{ pippkgs }}"
+    state: latest
+    virtualenv: "{{ superset_venv_path }}"
+    virtualenv_command: /usr/bin/python3.6 -m venv
+  vars:
+    pippkgs:
+      - pip
+      - setuptools
+      - psycopg2-binary
+      - redis
+      - apache-superset
+
+- name: Create admin user
+  become_user: superset
+  command: >
+    {{ superset_python_path }} fab create-admin
+      --username "{{ superset_username }}"
+      --firstname "{{ superset_firstname }}"
+      --lastname "{{ superset_lastname }}"
+      --email "{{ superset_email }}"
+      --password "{{ superset_password }}"
+
+- name: Prepare superset DB
+  become: true
+  become_user: "{{ superset_user }}"
+  command: "{{ superset_python_path }} db upgrade"
+
+- name: Load examples
+  become: true
+  become_user: superset
+  command: "{{ superset_python_path }} load_examples"
+  when: superset_load_examples
+
+- name: Init superset
+  become: true
+  become_user: superset
+  command: "{{ superset_python_path }} init"
+
+- name: Create superset systemd service
+  template:
+    src: "superset.service.j2"
+    dest: "{{ superset_service }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload systemctl
+    - restart superset
+
+- name: Configure superset
+  template:
+    src: config.py.j2
+    dest: "{{ superset_venv_path }}/lib/python{{ python_version }}/site-packages/superset/config.py"
+  notify:
+    - restart superset
+
+- name: Ensure Superset is running
+  service:
+    name: superset
+    state: started
+    enabled: yes

@@ -1,0 +1,35 @@
+---
+
+- name: Add ppa for python
+  become: true
+  apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: present
+
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    update_cache: yes
+    upgrade: "yes" # Needs to be quoted
+    force_apt_get: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install APT requirements
+  become: true
+  apt:
+    name: "{{ packages }}"
+    force_apt_get: yes
+    state: latest
+    update_cache: yes
+  vars:
+    packages:
+      - build-essential
+      - software-properties-common
+      - libssl-dev
+      - libffi-dev
+      - libsasl2-dev
+      - libldap2-dev
+      - python3.6-dev
+      - python3-venv
+      - python-pip
+

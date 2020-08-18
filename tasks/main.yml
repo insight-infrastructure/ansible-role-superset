@@ -1,5 +1,16 @@
 ---
 
-- include: install.yml
+- name: Create user for superset
+  user:
+    name: "{{ superset_user }}"
+    home: "{{ superset_path }}"
+    shell: /bin/bash
 
-- include: config.yml
+- name: Create superset group.
+  group:
+    name: "{{ superset_group }}"
+
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- include: common.yml

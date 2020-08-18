@@ -4,16 +4,16 @@
 
 Ansible role for superset
 
-This role was prepared and tested for Ubuntu 16.04.
+This role was prepared and tested for Ubuntu 18.04.
 
 # Installation
 
-`$ ansible-galaxy install iroquoisorg.superset`
+`$ ansible-galaxy install insight_infra.superset`
 
 # Default settings
 
 ```
-superset_version: 0.26.3
+superset_version: 0.37.0
 superset_username: user
 superset_password: password
 superset_firstname: John
@@ -22,7 +22,7 @@ superset_email: email@example.com
 
 superset_app: superset
 superset_flask_secret_key: changeme
-superset_port: 8888
+superset_port: 8088
 superset_workers: 2
 superset_mapbox_api_key: changeme
 superset_secret_key: changeme
@@ -35,14 +35,18 @@ superset_service: /etc/systemd/system/superset.service
 superset_user: superset
 superset_group: superset
 
+superset_user_shell: /bin/bash # Change to '/bin/false' in production
+
+python_version: 3.6
 superset_path: /opt/superset
-superset_python_path: /opt/superset/lib/python2.7
+superset_venv_path: /opt/superset/env
+superset_python_path: "{{ superset_venv_path }}/bin/python  {{ superset_venv_path }}/bin/superset"
 
 superset_postgres_db_host: localhost
 superset_postgres_db_port: 5432
-superset_postgres_db_name: superset
-superset_postgres_db_user: superset
-superset_postgres_db_pass: changeme
+superset_postgres_db_username: superset
+superset_database: postgres
+superset_postgres_db_password: changeme
 
 superset_load_examples: false
 
@@ -50,5 +54,4 @@ superset_languages:
   - key: en
     flag: us
     name: English
-
 ```
