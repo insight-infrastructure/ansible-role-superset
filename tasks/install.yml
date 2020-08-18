@@ -84,7 +84,18 @@
       --lastname "{{ superset_lastname }}"
       --email "{{ superset_email }}"
       --password "{{ superset_password }}"
-  
+
+# Hack to get it to work
+# https://stackoverflow.com/questions/63409478/ansible-pip-installing-in-superset-in-virtualenv-forcing-pip-vs-pip3
+- name: Re-install superset
+  shell:
+    cmd: |
+      . {{superset_venv_path}}/bin/activate
+      pip uninstall -y apache-superset
+      pip install apache-superset
+  notify:
+    - restart superset
+
 - name: Prepare superset DB
   become: true
   become_user: "{{ superset_user }}"
