@@ -13,4 +13,15 @@
 - include: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
+- include_role:
+    name: geerlingguy.redis
+  when: enable_superset_redis
+
+- include_role:
+    name: geerlingguy.postgresql
+  when: enable_superset_local_postgres
+
 - include: common.yml
+
+- include: nginx.yml
+  when: enable_superset_nginx

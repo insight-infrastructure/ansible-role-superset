@@ -5,6 +5,16 @@ superset_firstname: John
 superset_lastname: Doe
 superset_email: email@example.com
 
+# SSL + Nginx
+enable_superset_nginx: false
+enable_superset_ssl: false
+enable_superset_redis: true
+enable_superset_local_postgres: false
+
+# Needed for SSL when above is enabled
+fqdn: superset.example.com
+certbot_admin_email: "admin@{{ fqdn }}"
+
 superset_app: superset
 superset_flask_secret_key: changeme
 superset_port: 8088
@@ -12,10 +22,12 @@ superset_workers: 2
 superset_mapbox_api_key: changeme
 superset_secret_key: changeme
 
-superset_auth_type: AUTH_DB
-superset_oauth_providers:
-superset_service_env_vars:
+superset_auth_type: AUTH_DB  # Not implemented
+superset_oauth_providers: # Not implemented
+superset_service_env_vars: # Not implemented
+
 superset_service: /etc/systemd/system/superset.service
+
 
 superset_user: superset
 superset_group: superset
@@ -39,3 +51,5 @@ superset_languages:
   - key: en
     flag: us
     name: English
+    
+extra_pip_packages: []

@@ -1,0 +1,50 @@
+---
+
+- name: Run certbot for SSL
+  include_role:
+    name: geerlingguy.certbot
+  vars:
+    certbot_create_if_missing: true
+    certbot_admin_email: "{{ certbot_admin_email }}"
+    certbot_certs:
+      - domains:
+          - "{{ fqdn }}"
+    certbot_create_standalone_stop_services: []
+  when: enable_superset_ssl
+
+- include_role:
+    name: geerlingguy.nginx
+
+- name: Copy over nginx conf for SSL
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+
+- name: Copy over superset nginx conf for SSL
+  template:
+    src: superset.conf.j2
+    dest: /etc/nginx/sites-enabled/superset.conf
+  when: enable_superset_ssl
+  notify:
+    - restart nginx
+
+- name: Copy over superset nginx conf for non-SSL
+  template:
+    src: superset.conf.no-ssl.j2
+    dest: /etc/nginx/nginx.conf
+  when: not enable_superset_ssl
+  notify:
+    - restart nginx
+
+- name: Flush handlers in case any configs have changed.
+  meta: flush_handlers
+
+- name: Test secure connection to SSL domain.
+  uri:
+    url: "https://{{ fqdn }}"
+    status_code: 200
+  delegate_to: localhost
+  become: false
+  when:
+    - enable_superset_nginx
+    - enable_superset_ssl

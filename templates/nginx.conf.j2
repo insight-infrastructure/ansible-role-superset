@@ -1,0 +1,66 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+
+#from linode nginx.config optimizer
+
+events {
+    worker_connections 650;
+    use epoll;
+    multi_accept on;
+}
+
+http {
+		#from linode nginx.config optimizer
+		keepalive_requests 100000;
+
+		sendfile on;
+		tcp_nopush on;
+		tcp_nodelay on;
+		keepalive_timeout 65;
+		types_hash_max_size 2048;
+
+		client_header_timeout  3m;
+		client_body_timeout    3m;
+		send_timeout           3m;
+
+		open_file_cache max=1000 inactive=20s;
+		open_file_cache_valid 30s;
+		open_file_cache_min_uses 5;
+		open_file_cache_errors off;
+
+		gzip on;
+		gzip_min_length  1000;
+		gzip_buffers     4 4k;
+		gzip_types       text/html application/x-javascript text/css application/javascript text/javascript text/plain text/xml applica$
+		gzip_disable "MSIE [1-6]\.";
+
+		# [ debug | info | notice | warn | error | crit | alert | emerg ]
+		error_log  /var/log/nginx.error_log  warn;
+
+		log_format main      '$remote_addr - $remote_user [$time_local]  '
+		  '"$request" $status $bytes_sent '
+		  '"$http_referer" "$http_user_agent" '
+					'"$gzip_ratio"';
+
+		log_format download  '$remote_addr - $remote_user [$time_local]  '
+		  '"$request" $status $bytes_sent '
+		  '"$http_referer" "$http_user_agent" '
+					'"$http_range" "$sent_http_content_range"';
+
+		map $status $loggable {
+			~^[23]  0;
+			default 1;
+		}
+
+		#-------------from basic conf file-----------
+
+		include /etc/nginx/mime.types;
+		default_type application/octet-stream;
+
+
+		access_log /var/log/nginx/access.log;
+
+		include /etc/nginx/conf.d/*.conf;
+		include /etc/nginx/sites-enabled/*;
+}

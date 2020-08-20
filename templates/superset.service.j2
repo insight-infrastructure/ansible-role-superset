@@ -10,7 +10,13 @@ Environment="{{ key }}={{ value }}"
 {% endif %}
 User={{ superset_user }}
 Type=simple
+
+{% if enable_superset_nginx %}
+ExecStart={{ superset_python_path }} run -p {{ superset_port }} --with-threads --reload --debugger
+{% else %}
 ExecStart={{ superset_python_path }} run -p {{ superset_port }} --with-threads --reload --debugger --host=0.0.0.0
+{% endif %}
+
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
 KillSignal=SIGINT

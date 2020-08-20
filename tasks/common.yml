@@ -27,6 +27,17 @@
       - redis
       - apache-superset
 
+- name: Install pip packages
+  become_user: superset
+  pip:
+    name: "{{ pippkgs }}"
+    state: latest
+    virtualenv: "{{ superset_venv_path }}"
+    virtualenv_command: /usr/bin/python3.6 -m venv
+  vars:
+    pippkgs: "{{ extra_pip_packages }}"
+  when: extra_pip_packages | length > 0
+
 - name: Create admin user
   become_user: superset
   command: >
