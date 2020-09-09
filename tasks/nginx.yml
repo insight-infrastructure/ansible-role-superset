@@ -39,12 +39,12 @@
 - name: Flush handlers in case any configs have changed.
   meta: flush_handlers
 
-- name: Test secure connection to SSL domain.
-  uri:
-    url: "https://{{ fqdn }}"
-    status_code: 200
-  delegate_to: localhost
-  become: false
-  when:
-    - enable_superset_nginx
-    - enable_superset_ssl
+#- name: Test secure connection to SSL domain.
+#  uri:
+#    url: "https://{{ fqdn }}"
+#    status_code: 200
+#  delegate_to: localhost
+#  become: false
+#  when:
+#    - enable_superset_nginx
+#    - enable_superset_ssl
