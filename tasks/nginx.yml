@@ -39,6 +39,7 @@
 - name: Flush handlers in case any configs have changed.
   meta: flush_handlers
 
+# TODO: This failed once. Could have been from cached response... ATT...
 #- name: Test secure connection to SSL domain.
 #  uri:
 #    url: "https://{{ fqdn }}"
