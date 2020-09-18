@@ -38,6 +38,13 @@
     pippkgs: "{{ extra_pip_packages }}"
   when: extra_pip_packages | length > 0
 
+- name: Configure superset
+  template:
+    src: config.py.j2
+    dest: "{{ superset_venv_path }}/lib/python{{ python_version }}/site-packages/superset/config.py"
+  notify:
+    - restart superset
+
 - name: Create admin user
   become_user: superset
   command: >
@@ -73,13 +80,6 @@
     mode: 0644
   notify:
     - reload systemctl
-    - restart superset
-
-- name: Configure superset
-  template:
-    src: config.py.j2
-    dest: "{{ superset_venv_path }}/lib/python{{ python_version }}/site-packages/superset/config.py"
-  notify:
     - restart superset
 
 - name: Ensure Superset is running
